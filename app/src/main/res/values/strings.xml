@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BeaconSettingsManager</string>
+    <string name="action_settings">Settings</string>
+    <string name="scan_button">Scan</string>
+</resources>
