@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     private Set<MTPeripheral> mtPeripherals = new HashSet<>();
     private int peripheralCounter = 0;
     private List<MTPeripheral> peripheralsList = new ArrayList<>();
-    private Map<IBeaconFrame, DeviceInfoFrame> frames = new HashMap<>();
+    private List<String> beaconInfo = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +147,11 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
 
         }
         if (iBeaconFrame != null && deviceInfoFrame != null) {
-            frames.put(iBeaconFrame, deviceInfoFrame);
+            String info = iBeaconFrame.getUuid() + ":" + iBeaconFrame.getMajor() + ":" + iBeaconFrame.getMinor() + ","
+                    + deviceInfoFrame.getRadiotxPower() + "," + deviceInfoFrame.getAdvtxPower()
+                    + "," + deviceInfoFrame.getAdvInterval() + "\n";
+
+            beaconInfo.add(info);
         }
     }
 
@@ -166,10 +170,8 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
             if (firstCreate) {
                 writer.write("UUID:Major:Minor,RadiotxPower,AdvtxPower,AdvInternal\n");
             }
-            for (Map.Entry<IBeaconFrame, DeviceInfoFrame> entry : frames.entrySet()) {
-                writer.write(entry.getKey().getUuid() + ":" + entry.getKey().getMajor() + ":" + entry.getKey().getMinor() + ","
-                        + entry.getValue().getRadiotxPower() + "," + entry.getValue().getAdvtxPower()
-                        + "," + entry.getValue().getAdvInterval() + "\n");
+            for (String string : beaconInfo) {
+                writer.write(string);
             }
             writer.close();
 
